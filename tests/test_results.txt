@@ -1,0 +1,15 @@
+=========================================== test session starts ===========================================
+platform linux2 -- Python 2.7.12+, pytest-3.0.5, py-1.4.33, pluggy-0.4.0 -- /usr/bin/python
+cachedir: .cache
+rootdir: /home/jdaly/Desktop/Data/Accidental-Drug-Related-Deaths-by-Drug-Type, inifile: 
+plugins: ctdata-datapackage-0.1.0
+collected 6 items 
+
+tests/test_default.py::test_towns PASSED
+tests/test_default.py::test_dataset_row_counts PASSED
+tests/test_default.py::test_spotcheck_testing PASSED
+tests/test_default.py::test_geography_count PASSED
+tests/test_default.py::test_schema_validation PASSED
+tests/test_default.py::test_domain_subdomain_validation PASSED
+
+======================================== 6 passed in 58.71 seconds ========================================
