@@ -303,10 +303,10 @@ drug_data <- transform(drug_data, Age = factor(Age, levels = c("Total", "Under 2
                                   `Drug Type` = factor(`Drug Type`, levels = c("Total", "Any Opioid", "Only Opioids", "Any Non-Heroin Opioid", 
                                                                                "Only Non-Heroin Opioids", "Any Non-Opioid", "Only Non-Opioids"), ordered=TRUE)) 
                                                                                
-#Order and sort columns (first Value cannot be 0, for publishing)
+#Order and sort columns (first Value cannot be 0 or 1, for publishing)
 drug_data <- drug_data %>% 
   select(Town, FIPS, Year, Age, Gender, Race, Ethnicity, `Drug Type`, `Measure Type`, Variable, Value) %>% 
-  arrange(Town, desc(Value))
+  arrange(desc(Value)) #<- keep this
 
 # Write to File
 write.table(
