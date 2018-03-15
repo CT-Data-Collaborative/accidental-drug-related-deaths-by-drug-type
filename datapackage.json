@@ -21,7 +21,7 @@
   }],
   "contributor": [],
   "resources": [{
-    "path": "data/accidental-drug-related-deaths-by-drug-type_2012-2016.csv",
+    "path": "data/accidental-drug-related-deaths-by-drug-type_2012-2017.csv",
     "format": "csv",
     "schema": {
       "fields": [{
@@ -122,7 +122,7 @@
       }
     }
   ],
-  "last_modified": "08/29/2017",
+  "last_modified": "03/15/2018",
   "ckan_extras": {
     "full_description": {
       "ckan_name": "Full Description",
@@ -146,7 +146,7 @@
     },
     "socrata_url": {
       "ckan_name": "Socrata Dataset URL",
-      "value": "https://data.ct.gov/Health-and-Human-Services/Accidental-Drug-Related-Deaths-2012-2016/rybz-nyjw",
+      "value": "https://data.ct.gov/Health-and-Human-Services/Accidental-Drug-Related-Deaths-2012-2017/rybz-nyjw",
       "type": "string"
     },
     "domain": {
@@ -172,12 +172,12 @@
     },
     "years_in_catalog": {
       "ckan_name": "Years in Catalog",
-      "value": ["2012", "2013", "2014", "2015", "2016"],
+      "value": ["2012", "2013", "2014", "2015", "2016", "2017"],
       "type": "array"
     },
     "latest_year": {
       "ckan_name": "Latest Year Available",
-      "value": "2016",
+      "value": "2017",
       "type": "string"
     },
     "disabled_views": {
@@ -202,7 +202,7 @@
       "ckan_name": "Default",
       "value": {
         "Town": "Connecticut",
-        "Year": ["2014", "2015", "2016"],
+        "Year": ["2015", "2016", "2017"],
         "Age": "Total", 
         "Gender": "Total", 
         "Race": "Total",     
@@ -346,6 +346,25 @@
         "type": "$match",
         "number type": "int",
         "value": 0
+      } 
+    },       
+    {
+      "type": "$lookup",
+      "filter": {
+        "Town": "Bridgeport",
+        "Year":	"2017",
+        "Variable":	"Accidental Drug Related Deaths",
+        "Measure Type":	"Number",
+        "Age": "Total", 
+        "Gender": "Female", 
+        "Race": "White", 	
+        "Ethnicity": "Total", 		 		
+        "Drug Type": "Any Opioid" 
+      },
+      "expected": {
+        "type": "$match",
+        "number type": "int",
+        "value": 8
       } 
     }
   ],

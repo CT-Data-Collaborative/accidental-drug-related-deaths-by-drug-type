@@ -16,9 +16,13 @@ raw_location <- grep("raw", sub_folders, value=T)
 path_to_raw_data <- (paste0(getwd(), "/", raw_location))
 data_location <- grep("data$", sub_folders, value=T)
 path_to_data <- (paste0(getwd(), "/", data_location))
+#Find latest year
 drug_type <- dir(path_to_raw_data, recursive=T, pattern = "Drug") 
+data_yr <- as.numeric(gsub("[^\\d]+", "", drug_type, perl=TRUE))
+max_year <- substr(max(data_yr), 5, 8)
+latest_data <- grep(max_year, drug_type, value =T)
 
-drug_type_df <- read.csv(paste0(path_to_raw_data, "/", drug_type), stringsAsFactors = FALSE, header=T, check.names = F) 
+drug_type_df <- read.csv(paste0(path_to_raw_data, "/", latest_data), stringsAsFactors = FALSE, header=T, check.names = F) 
 
 #Take care of known issues in raw data file
 ##Unmarked Causes by Case Number
@@ -75,6 +79,11 @@ drug_type_df <- drug_type_df %>%
 source('./scripts/ctnamecleaner.R')
 drug_type_df <- ctnamecleaner(Town, drug_type_df)
 
+#Check to see if there were any "no matches", (is.na(real.town.name)), assign real town name if so. 
+#Only two for now, easier to fix them indiv, if many towns don't match, create supplemental xwalk file
+drug_type_df$real.town.name[drug_type_df$Town == "Vernon-Rockville"] <- "Vernon"
+drug_type_df$real.town.name[drug_type_df$Town == "06340"] <- "Groton"
+
 drug_type_df$Town <- NULL
 drug_type_df <- drug_type_df %>% rename(Town = real.town.name)
 
@@ -102,7 +111,24 @@ drug_type_df$Age[which(drug_type_df$num.age > 60)] <- "61 years and over"
 # Remove working column
 drug_type_df$num.age <- NULL
 
-drug_type_df$Heroin[drug_type_df$Heroin == "y"] <- "Y"
+#Correct drug columns
+#apply to all the following columns: 
+fix_drugs <- c("Heroin", "Cocaine", "Fentanyl", "Oxycodone", 
+               "Oxymorphone", "EtOH", "Hydrocodone", "Benzodiazepine",
+               "Methadone", "Amphet", "Tramad", "Morphine (not heroin)")
+#convert " " to ""
+drug_type_df[fix_drugs] <- lapply(drug_type_df[fix_drugs], function(x) replace(x,x == " ", "") )
+
+#if not "", convert to Y
+drug_type_df[fix_drugs] <- lapply(drug_type_df[fix_drugs], function(x) replace(x,x != "", "Y") )
+
+# "y" 
+# "Y (PTCH)" 
+# "Y POPS" 
+# "NO RX BUT STRAWS" 
+# "STOLE MEDS" 
+# "PCP neg" 
+# " Y"
 
 ################################################################################################################
 #Now start to aggregate totals
@@ -112,9 +138,9 @@ raw <- as.data.table(drug_type_df)
 raw[
   ,
   listedDrugs := paste(
-    Heroin, Cocaine, Fentanyl, Oxycodone, Oxymorphone, EtOH, `Hydro-codeine`, Benzodiazepine, 
+    Heroin, Cocaine, Fentanyl, Oxycodone, Oxymorphone, EtOH, Hydrocodone, Benzodiazepine, 
     Methadone, Amphet, Tramad, `Morphine (not heroin)`, sep = ""),
-  by = list(Heroin, Cocaine, Fentanyl, Oxycodone, Oxymorphone, EtOH, `Hydro-codeine`, Benzodiazepine, 
+  by = list(Heroin, Cocaine, Fentanyl, Oxycodone, Oxymorphone, EtOH, Hydrocodone, Benzodiazepine, 
             Methadone, Amphet, Tramad, `Morphine (not heroin)`)
   ]
 
@@ -277,15 +303,15 @@ drug_data <- transform(drug_data, Age = factor(Age, levels = c("Total", "Under 2
                                   `Drug Type` = factor(`Drug Type`, levels = c("Total", "Any Opioid", "Only Opioids", "Any Non-Heroin Opioid", 
                                                                                "Only Non-Heroin Opioids", "Any Non-Opioid", "Only Non-Opioids"), ordered=TRUE)) 
                                                                                
-#Order and sort columns         
+#Order and sort columns (first Value cannot be 0, for publishing)
 drug_data <- drug_data %>% 
   select(Town, FIPS, Year, Age, Gender, Race, Ethnicity, `Drug Type`, `Measure Type`, Variable, Value) %>% 
-  arrange(desc(Value))
+  arrange(Town, desc(Value))
 
 # Write to File
 write.table(
   drug_data,
-  file.path(getwd(), "data", "accidental-drug-related-deaths-by-drug-type_2012-2016.csv"),
+  file.path(getwd(), "data", "accidental-drug-related-deaths-by-drug-type_2012-2017.csv"),
   sep = ",",
   row.names = F,
   na = "-9999"

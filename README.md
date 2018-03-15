@@ -2,7 +2,7 @@ Accidental Drug Related Deaths by Drug Type
 
 Accidental Drug Related Deaths by Drug Type reports totals and subtotals of deaths attributable to accidental drug overdoses by place of death as reported by the Connecticut Office of the Chief Medical Examiner. Deaths are by grouped age, race, ethnicity, and gender and by the types of drugs detected post-death.
 
-Data Source: <https://data.ct.gov/Health-and-Human-Services/Accidental-Drug-Related-Deaths-2012-2016/rybz-nyjw>
+Data Source: <https://data.ct.gov/Health-and-Human-Services/Accidental-Drug-Related-Deaths-2012-2017/rybz-nyjw>
 
 ## License MIT
 
