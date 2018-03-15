@@ -202,12 +202,12 @@
       "ckan_name": "Default",
       "value": {
         "Town": "Connecticut",
-        "Year": ["2012", "2013", "2014", "2015", "2016", "2017"],
+        "Year": ["2013", "2014", "2015", "2016", "2017"],
         "Age": "Total", 
         "Gender": "Total", 
         "Race": "Total",     
         "Ethnicity": "Total",                  
-        "Drug Type": "Total",                          
+        "Drug Type": ["Total", "Any Opioid"],                          
         "Measure Type": "Number", 
         "Variable": "Accidental Drug Related Deaths"
       },
