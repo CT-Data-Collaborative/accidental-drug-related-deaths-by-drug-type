@@ -4,6 +4,8 @@ Accidental Drug Related Deaths by Drug Type reports totals and subtotals of deat
 
 Data Source: <https://data.ct.gov/Health-and-Human-Services/Accidental-Drug-Related-Deaths-2012-2017/rybz-nyjw>
 
+Processed data too large for GitHub.
+
 ## License MIT
 
 ## Getting Setup
